@@ -6,3 +6,5 @@ simpy
 torch
 ray
 psutils
+uvicorn
+fastapi
