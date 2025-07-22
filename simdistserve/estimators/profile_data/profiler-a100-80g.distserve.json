@@ -1,4 +1,24 @@
 {
+  "meta-llama/Llama-3.1-8B": {
+    "1": {
+      "decoding_large_small_bs_threshold": 95,
+      "prefill": [
+        17.9188563,
+        0.035832,
+        0.000001
+      ],
+      "decoding_smallbs": [
+        17.02,
+        0.0049,
+        0.777561
+      ],
+      "decoding_largebs": [
+        26.46,
+        0.00347,
+        0.5056
+      ]
+    }
+  },
   "facebook/opt-13b": {
     "1": {
       "decoding_large_small_bs_threshold": 95,

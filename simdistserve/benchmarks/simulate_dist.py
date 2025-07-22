@@ -226,6 +226,8 @@ def main(args, outputs=None):
         with open(args.output_request_latency, 'w') as f:
             per_request_latency_df.to_csv(f, index=False)
 
+    workload_duration_ms = max(arrival) - min(arrival)
+    print(f"Workload duration: {workload_duration_ms} ms")
     columns = [
         "backend", "model_type", "pd", "rate", "target", "attainment",
         "tp_prefill", "pp_prefill", "tp_decode", "pp_decode",
@@ -272,6 +274,27 @@ def main(args, outputs=None):
                 TP_Prefill, PP_prefill, TP_Decode, PP_decode]
         output_results.append(item)
         pass
+
+    # Compute boolean masks
+    satisfies_prefill = per_request_latency_df["first_token_latency"] < prefill_target
+    satisfies_decode = per_request_latency_df["tpot"] < decode_target
+
+    # Count how many requests satisfy each SLO
+    num_prefill_pass = satisfies_prefill.sum()
+    num_decode_pass = satisfies_decode.sum()
+
+    # Convert workload duration to seconds
+    workload_duration_s = workload_duration_ms / 1000
+
+    # Compute goodput in req/s
+    prefill_goodput_rps = num_prefill_pass / workload_duration_s
+    decode_goodput_rps = num_decode_pass / workload_duration_s
+
+    # Print results
+    print(f"--- SLO Goodput Report ---")
+    print(f"Workload rps: {len(arrival)/workload_duration_s:.1f} req/s")
+    print(f"Prefill Goodput: {prefill_goodput_rps:.1f} req/s, {num_prefill_pass} reqs")
+    print(f"Decode  Goodput: {decode_goodput_rps:.1f} req/s, {num_decode_pass} reqs")
 
     df = pd.DataFrame(output_results, columns=columns)
     outputs['latency_df'] = df

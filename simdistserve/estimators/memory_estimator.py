@@ -45,6 +45,7 @@ model_hyperparams = {
     "facebook/opt-13b": (40, 40),
     "facebook/opt-66b": (64, 72),
     "facebook/opt-175b": (96, 96),
+    "meta-llama/Llama-3.1-8B": (32, 32),
 }
 
 

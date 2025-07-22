@@ -34,7 +34,8 @@ def main(
         configs = get_vllm_config(
             model_type, num_node * num_gpu_per_node
         )
-
+    # print(configs)
+    configs = [(1,1,1,1,1)]
     processes = []
     # Add a multiproc shared dict
     with Manager() as manager:

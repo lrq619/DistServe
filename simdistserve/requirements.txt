@@ -3,3 +3,6 @@ matplotlib
 pandas
 transformers
 simpy
+torch
+ray
+psutils
