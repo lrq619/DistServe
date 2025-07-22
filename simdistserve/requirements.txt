@@ -3,8 +3,6 @@ matplotlib
 pandas
 transformers
 simpy
-torch
-ray
 psutils
 uvicorn
 fastapi

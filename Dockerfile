@@ -17,4 +17,4 @@ COPY simdistserve/ /app/simdistserve/
 RUN pip install --no-cache-dir -r /app/simdistserve/requirements.txt
 ENV PYTHONPATH="/app/simdistserve:${PYTHONPATH}"
 
-ENTRYPOINT ["python", "/app/simdistserve/benchmarks/simulate.py"]
+ENTRYPOINT ["python", "/app/simdistserve/main.py"]
