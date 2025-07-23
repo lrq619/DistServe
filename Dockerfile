@@ -15,6 +15,6 @@ COPY simdistserve/ /app/simdistserve/
 
 # # Install Python dependencies
 RUN pip install --no-cache-dir -r /app/simdistserve/requirements.txt
-ENV PYTHONPATH="/app/simdistserve:${PYTHONPATH}"
+ENV PYTHONPATH="/app:${PYTHONPATH}"
 
 ENTRYPOINT ["python", "/app/simdistserve/main.py"]
