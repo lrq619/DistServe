@@ -25,8 +25,6 @@ import simpy
 parser = argparse.ArgumentParser()
 parser.add_argument('--host', type=str, default='0.0.0.0')
 parser.add_argument('--port', type=int, default=8000)
-parser.add_argument('--prefill-target-ms', type=int, default=2000)
-parser.add_argument('--decode-target-ms', type=int, default=100)
 args, _ = parser.parse_known_args()
 
 # -------------------------------
@@ -41,6 +39,8 @@ class WorkloadItem(BaseModel):
 class SimulationRequest(BaseModel):
     model: str
     workloads: List[WorkloadItem]
+    prefill_target_ms: int = 2000
+    decode_target_ms: int = 100
 
 # -------------------------------
 # HTTP App Init
@@ -50,9 +50,9 @@ app = FastAPI()
 # -------------------------------
 # Helper for Simulation
 # -------------------------------
-def run_simulation(req: SimulationRequest):
-    model_name = req.model
-    workloads = req.workloads
+def run_simulation(http_req: SimulationRequest):
+    model_name = http_req.model
+    workloads = http_req.workloads
     model_type = ModelTypes.model_str_to_object(model_name)
     TP_Prefill = 1
     PP_prefill = 1
@@ -101,8 +101,8 @@ def run_simulation(req: SimulationRequest):
     print(f"Workload duration: {workload_duration_ms} ms")
 
     # Compute boolean masks
-    satisfies_prefill = per_request_latency_df["first_token_latency"] < args.prefill_target_ms
-    satisfies_decode = per_request_latency_df["tpot"] < args.decode_target_ms
+    satisfies_prefill = per_request_latency_df["first_token_latency"] < http_req.prefill_target_ms
+    satisfies_decode = per_request_latency_df["tpot"] < http_req.decode_target_ms
 
     # Count how many requests satisfy each SLO
     num_prefill_pass = satisfies_prefill.sum()
